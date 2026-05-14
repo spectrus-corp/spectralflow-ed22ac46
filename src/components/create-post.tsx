@@ -5,12 +5,12 @@ import { z } from "zod";
 import { Send, Youtube } from "lucide-react";
 import { toast } from "sonner";
 
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { extractYouTubeId } from "@/lib/youtube";
+import { publishPost } from "@/lib/posts";
 import { YouTubeEmbed } from "./youtube-embed";
 
 const schema = z
@@ -48,19 +48,21 @@ export function CreatePost({ onPosted }: { onPosted?: () => void }) {
       toast.error("Lien YouTube invalide");
       return;
     }
-    const { error } = await supabase.from("posts").insert({
-      user_id: user.id,
-      content: data.content?.trim() || null,
-      youtube_url: ytLink,
-    });
-    setSubmitting(false);
-    if (error) {
-      toast.error(error.message);
-      return;
+
+    try {
+      await publishPost(user.id, { content: data.content, youtubeUrl: ytLink });
+      toast.success("Post publié");
+      reset();
+      onPosted?.();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Impossible de publier le post");
+    } finally {
+      setSubmitting(false);
     }
-    reset();
-    onPosted?.();
   };
+
+  const draftContent = watch("content");
+  const isDraftEmpty = !(draftContent?.trim() || ytUrl?.trim());
 
   return (
     <form
@@ -90,7 +92,7 @@ export function CreatePost({ onPosted }: { onPosted?: () => void }) {
         <p className="mt-2 text-xs text-destructive">{errors.content.message}</p>
       )}
       <div className="mt-3 flex justify-end">
-        <Button type="submit" disabled={submitting} className="neon-glow">
+        <Button type="submit" disabled={submitting || isDraftEmpty} className="neon-glow">
           <Send className="mr-2 h-4 w-4" />
           {submitting ? "Envoi..." : "Publier"}
         </Button>
