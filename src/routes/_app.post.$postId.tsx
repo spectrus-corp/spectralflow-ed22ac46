@@ -35,7 +35,7 @@ function PostPage() {
 
   if (loading) {
     return (
-      <div className="flex h-[100svh] items-center justify-center bg-black">
+      <div className="flex h-[calc(100svh-3rem)] items-center justify-center bg-black">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -43,7 +43,7 @@ function PostPage() {
 
   if (!post) {
     return (
-      <div className="flex h-[100svh] flex-col items-center justify-center gap-4 bg-black text-center">
+      <div className="flex h-[calc(100svh-3rem)] flex-col items-center justify-center gap-4 bg-black text-center">
         <p className="text-lg text-muted-foreground">Post introuvable.</p>
         <Button asChild>
           <Link to="/feed">Retour au flux</Link>
@@ -53,7 +53,7 @@ function PostPage() {
   }
 
   return (
-    <div className="relative h-[100svh] w-full bg-black">
+    <div className="relative h-[calc(100svh-3rem)] w-full bg-black">
       <button
         onClick={() => navigate({ to: "/feed" })}
         className="fixed left-4 top-4 z-40 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-xl"
