@@ -140,7 +140,7 @@ export function VideoCard({ post, active, muted, onToggleMute, onChange }: Props
 
   return (
     <section
-      className="relative h-[100svh] w-full snap-start snap-always overflow-hidden bg-black"
+      className="relative h-[calc(100svh-3rem)] w-full snap-start snap-always overflow-hidden bg-black"
       aria-label={`Post de ${name}`}
     >
       {/* Player layer — wrapped so taps register */}
