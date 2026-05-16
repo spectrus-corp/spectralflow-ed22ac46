@@ -155,6 +155,7 @@ export function VideoCard({ post, active, nearby, muted, onToggleMute, onChange 
             kind="video"
             src={post.media_url!}
             active={active}
+            nearby={nearby}
             muted={muted}
             onToggleMute={onToggleMute}
             poster={poster}
@@ -165,6 +166,7 @@ export function VideoCard({ post, active, nearby, muted, onToggleMute, onChange 
             kind="youtube"
             ytId={ytId!}
             active={active}
+            nearby={nearby}
             muted={muted}
             onToggleMute={onToggleMute}
             poster={poster}
