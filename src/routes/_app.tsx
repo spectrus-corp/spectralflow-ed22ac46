@@ -34,7 +34,7 @@ function AppLayout() {
           <header className="sticky top-0 z-20 hidden h-12 items-center gap-2 border-b border-border bg-background/70 px-3 backdrop-blur-xl md:flex">
             <SidebarTrigger />
           </header>
-          <main className="flex-1 pb-16 md:pb-0">
+          <main className="flex-1">
             <Outlet />
           </main>
         </div>

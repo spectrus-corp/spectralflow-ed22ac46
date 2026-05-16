@@ -145,7 +145,7 @@ function FeedPage() {
 
   if (loading) {
     return (
-      <div className="flex h-[calc(100svh-3rem)] items-center justify-center bg-black">
+      <div className="flex h-[calc(100svh-4rem)] md:h-[calc(100svh-3rem)] items-center justify-center bg-black">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
@@ -153,7 +153,7 @@ function FeedPage() {
 
   if (posts.length === 0) {
     return (
-      <div className="flex h-[calc(100svh-3rem)] flex-col items-center justify-center gap-4 bg-gradient-to-b from-background to-card px-6 text-center">
+      <div className="flex h-[calc(100svh-4rem)] md:h-[calc(100svh-3rem)] flex-col items-center justify-center gap-4 bg-gradient-to-b from-background to-card px-6 text-center">
         <Sparkles className="h-12 w-12 text-primary" />
         <h1 className="text-2xl font-bold">
           Le flux est <span className="gradient-text">vide</span>
@@ -174,7 +174,7 @@ function FeedPage() {
   }
 
   return (
-    <div className="relative h-[calc(100svh-3rem)] w-full bg-black">
+    <div className="relative h-[calc(100svh-4rem)] md:h-[calc(100svh-3rem)] w-full bg-black">
       <div
         ref={containerRef}
         className="h-full w-full snap-y snap-mandatory overflow-y-scroll scroll-smooth"
