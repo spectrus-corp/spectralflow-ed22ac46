@@ -202,7 +202,7 @@ function FeedPage() {
       {/* Floating create button */}
       <button
         onClick={() => setComposerOpen(true)}
-        className="fixed bottom-6 right-6 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/40 transition-transform hover:scale-110 active:scale-95"
+        className="fixed bottom-20 right-4 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/40 transition-transform hover:scale-110 active:scale-95 md:bottom-6 md:right-6"
         aria-label="Créer un post"
       >
         <Plus className="h-7 w-7" />
