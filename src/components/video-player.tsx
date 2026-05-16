@@ -10,6 +10,8 @@ interface BaseProps {
   onProgress?: (pct: number) => void;
   onFirstPlay?: () => void;
   poster?: string | null;
+  /** Preload full video (next/prev cards) for instant playback when scrolled to. */
+  nearby?: boolean;
 }
 
 interface UploadProps extends BaseProps {
