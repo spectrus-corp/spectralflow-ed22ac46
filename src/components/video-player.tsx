@@ -123,7 +123,7 @@ function NativeVideoPlayer({
         loop
         playsInline
         muted={muted}
-        preload="metadata"
+        preload={nearby ? "auto" : "metadata"}
         className="h-full w-full object-contain"
         onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
         onTimeUpdate={onTimeUpdate}
