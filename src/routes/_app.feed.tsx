@@ -211,6 +211,7 @@ function FeedPage() {
             <VideoCard
               post={post}
               active={idx === activeIdx}
+              nearby={Math.abs(idx - activeIdx) <= 1}
               muted={muted}
               onToggleMute={() => setMuted((m) => !m)}
               onChange={load}

@@ -34,6 +34,7 @@ import { HeartBurst, type BurstPoint } from "./heart-burst";
 interface Props {
   post: FeedPost;
   active: boolean;
+  nearby?: boolean;
   muted: boolean;
   onToggleMute: () => void;
   onChange: () => void;
@@ -46,7 +47,7 @@ interface Props {
  * - side actions: like / comment / share / views
  * - comment drawer + delete (own posts)
  */
-export function VideoCard({ post, active, muted, onToggleMute, onChange }: Props) {
+export function VideoCard({ post, active, nearby, muted, onToggleMute, onChange }: Props) {
   const { user } = useAuth();
   const [liked, setLiked] = useState(post.liked);
   const [likeCount, setLikeCount] = useState(post.likeCount);
@@ -154,6 +155,7 @@ export function VideoCard({ post, active, muted, onToggleMute, onChange }: Props
             kind="video"
             src={post.media_url!}
             active={active}
+            nearby={nearby}
             muted={muted}
             onToggleMute={onToggleMute}
             poster={poster}
@@ -164,6 +166,7 @@ export function VideoCard({ post, active, muted, onToggleMute, onChange }: Props
             kind="youtube"
             ytId={ytId!}
             active={active}
+            nearby={nearby}
             muted={muted}
             onToggleMute={onToggleMute}
             poster={poster}
