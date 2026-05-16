@@ -100,11 +100,14 @@ export async function fetchFeedPosts(
   opts: FetchFeedOptions = {},
 ): Promise<FeedPost[]> {
   const { limit = 50, videosOnly = false } = opts;
+  // Only keep posts published in the last 48 hours
+  const since = new Date(Date.now() - FEED_WINDOW_MS).toISOString();
   let query = supabase
     .from("posts")
     .select(
       "id,user_id,content,youtube_url,media_url,media_type,thumbnail_url,views,aspect_ratio,created_at,profile:profiles(username,display_name,avatar_url)",
     )
+    .gte("created_at", since)
     .order("created_at", { ascending: false })
     .limit(limit);
 
