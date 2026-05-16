@@ -35,6 +35,13 @@ export interface PublishPostPayload {
 
 const EMPTY_UUID = "00000000-0000-0000-0000-000000000000";
 
+/** Posts disappear from the feed after this window (48 hours). */
+export const FEED_WINDOW_MS = 48 * 60 * 60 * 1000;
+
+export function isWithinFeedWindow(createdAt: string): boolean {
+  return Date.now() - new Date(createdAt).getTime() < FEED_WINDOW_MS;
+}
+
 export async function publishPost(userId: string, payload: PublishPostPayload): Promise<FeedPost> {
   const content = payload.content?.trim() || null;
   const youtube_url = payload.youtubeUrl?.trim() || null;
@@ -100,11 +107,14 @@ export async function fetchFeedPosts(
   opts: FetchFeedOptions = {},
 ): Promise<FeedPost[]> {
   const { limit = 50, videosOnly = false } = opts;
+  // Only keep posts published in the last 48 hours
+  const since = new Date(Date.now() - FEED_WINDOW_MS).toISOString();
   let query = supabase
     .from("posts")
     .select(
       "id,user_id,content,youtube_url,media_url,media_type,thumbnail_url,views,aspect_ratio,created_at,profile:profiles(username,display_name,avatar_url)",
     )
+    .gte("created_at", since)
     .order("created_at", { ascending: false })
     .limit(limit);
 

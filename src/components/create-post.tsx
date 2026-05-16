@@ -190,3 +190,63 @@ function UploadForm({ onPosted }: { onPosted: () => void }) {
 }
 
 function YouTubeForm({ onPosted }: { onPosted: () => void }) {
+  const { user } = useAuth();
+  const [submitting, setSubmitting] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<YTForm>({ resolver: zodResolver(ytSchema) });
+
+  const url = watch("youtubeUrl");
+  const ytId = url ? extractYouTubeId(url) : null;
+  const thumb = ytId ? youTubeThumbnail(ytId) : null;
+
+  const onSubmit = async (data: YTForm) => {
+    if (!user) return;
+    if (!extractYouTubeId(data.youtubeUrl)) {
+      toast.error("Lien YouTube invalide");
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await publishPost(user.id, {
+        content: data.content,
+        youtubeUrl: data.youtubeUrl,
+        mediaType: "youtube",
+        thumbnailUrl: thumb,
+      });
+      toast.success("Vidéo publiée !");
+      onPosted();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Échec de la publication");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+      <Input placeholder="https://youtube.com/watch?v=…" {...register("youtubeUrl")} />
+      {errors.youtubeUrl && (
+        <p className="text-xs text-destructive">{errors.youtubeUrl.message}</p>
+      )}
+      {thumb && (
+        <div className="overflow-hidden rounded-2xl border border-border">
+          <img src={thumb} alt="Miniature YouTube" className="aspect-video w-full object-cover" />
+        </div>
+      )}
+      <Textarea
+        rows={2}
+        placeholder="Légende (optionnelle)…"
+        className="resize-none"
+        {...register("content")}
+      />
+      <Button type="submit" disabled={submitting} className="w-full neon-glow">
+        <Send className="mr-2 h-4 w-4" />
+        {submitting ? "Publication…" : "Publier"}
+      </Button>
+    </form>
+  );
+}
