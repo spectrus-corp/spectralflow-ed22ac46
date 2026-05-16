@@ -47,7 +47,7 @@ interface Props {
  * - side actions: like / comment / share / views
  * - comment drawer + delete (own posts)
  */
-export function VideoCard({ post, active, muted, onToggleMute, onChange }: Props) {
+export function VideoCard({ post, active, nearby, muted, onToggleMute, onChange }: Props) {
   const { user } = useAuth();
   const [liked, setLiked] = useState(post.liked);
   const [likeCount, setLikeCount] = useState(post.likeCount);
