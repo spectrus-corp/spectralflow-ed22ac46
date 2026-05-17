@@ -14,9 +14,11 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppSubscriptionsRouteImport } from './routes/_app.subscriptions'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
 import { Route as AppPluginsRouteImport } from './routes/_app.plugins'
+import { Route as AppNotificationsRouteImport } from './routes/_app.notifications'
 import { Route as AppFeedRouteImport } from './routes/_app.feed'
 import { Route as AppChatRouteImport } from './routes/_app.chat'
 import { Route as AppPostPostIdRouteImport } from './routes/_app.post.$postId'
@@ -45,6 +47,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppSubscriptionsRoute = AppSubscriptionsRouteImport.update({
+  id: '/subscriptions',
+  path: '/subscriptions',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -58,6 +65,11 @@ const AppProfileRoute = AppProfileRouteImport.update({
 const AppPluginsRoute = AppPluginsRouteImport.update({
   id: '/plugins',
   path: '/plugins',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNotificationsRoute = AppNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => AppRoute,
 } as any)
 const AppFeedRoute = AppFeedRouteImport.update({
@@ -83,9 +95,11 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/chat': typeof AppChatRoute
   '/feed': typeof AppFeedRoute
+  '/notifications': typeof AppNotificationsRoute
   '/plugins': typeof AppPluginsRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRoute
+  '/subscriptions': typeof AppSubscriptionsRoute
   '/post/$postId': typeof AppPostPostIdRoute
 }
 export interface FileRoutesByTo {
@@ -95,9 +109,11 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/chat': typeof AppChatRoute
   '/feed': typeof AppFeedRoute
+  '/notifications': typeof AppNotificationsRoute
   '/plugins': typeof AppPluginsRoute
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRoute
+  '/subscriptions': typeof AppSubscriptionsRoute
   '/post/$postId': typeof AppPostPostIdRoute
 }
 export interface FileRoutesById {
@@ -109,9 +125,11 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_app/chat': typeof AppChatRoute
   '/_app/feed': typeof AppFeedRoute
+  '/_app/notifications': typeof AppNotificationsRoute
   '/_app/plugins': typeof AppPluginsRoute
   '/_app/profile': typeof AppProfileRoute
   '/_app/settings': typeof AppSettingsRoute
+  '/_app/subscriptions': typeof AppSubscriptionsRoute
   '/_app/post/$postId': typeof AppPostPostIdRoute
 }
 export interface FileRouteTypes {
@@ -123,9 +141,11 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/chat'
     | '/feed'
+    | '/notifications'
     | '/plugins'
     | '/profile'
     | '/settings'
+    | '/subscriptions'
     | '/post/$postId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -135,9 +155,11 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/chat'
     | '/feed'
+    | '/notifications'
     | '/plugins'
     | '/profile'
     | '/settings'
+    | '/subscriptions'
     | '/post/$postId'
   id:
     | '__root__'
@@ -148,9 +170,11 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/_app/chat'
     | '/_app/feed'
+    | '/_app/notifications'
     | '/_app/plugins'
     | '/_app/profile'
     | '/_app/settings'
+    | '/_app/subscriptions'
     | '/_app/post/$postId'
   fileRoutesById: FileRoutesById
 }
@@ -199,6 +223,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_app/subscriptions': {
+      id: '/_app/subscriptions'
+      path: '/subscriptions'
+      fullPath: '/subscriptions'
+      preLoaderRoute: typeof AppSubscriptionsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/settings': {
       id: '/_app/settings'
       path: '/settings'
@@ -218,6 +249,13 @@ declare module '@tanstack/react-router' {
       path: '/plugins'
       fullPath: '/plugins'
       preLoaderRoute: typeof AppPluginsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/notifications': {
+      id: '/_app/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AppNotificationsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/feed': {
@@ -247,18 +285,22 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppChatRoute: typeof AppChatRoute
   AppFeedRoute: typeof AppFeedRoute
+  AppNotificationsRoute: typeof AppNotificationsRoute
   AppPluginsRoute: typeof AppPluginsRoute
   AppProfileRoute: typeof AppProfileRoute
   AppSettingsRoute: typeof AppSettingsRoute
+  AppSubscriptionsRoute: typeof AppSubscriptionsRoute
   AppPostPostIdRoute: typeof AppPostPostIdRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppChatRoute: AppChatRoute,
   AppFeedRoute: AppFeedRoute,
+  AppNotificationsRoute: AppNotificationsRoute,
   AppPluginsRoute: AppPluginsRoute,
   AppProfileRoute: AppProfileRoute,
   AppSettingsRoute: AppSettingsRoute,
+  AppSubscriptionsRoute: AppSubscriptionsRoute,
   AppPostPostIdRoute: AppPostPostIdRoute,
 }
 

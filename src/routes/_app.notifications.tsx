@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Bell, Info } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/notifications")({
+export const Route = createFileRoute("/_app/notifications")({
   component: NotificationsPage,
   head: () => ({
     meta: [

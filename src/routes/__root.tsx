@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import appCss from "../styles.css?url";
 import { AuthProvider, useAuth } from "@/hooks/use-auth";
@@ -92,6 +92,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "SpectralFlow est un réseau social hybride qui mêle flux vidéo immersif, partage YouTube et chat temps réel.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://spectralflow.lovable.app/icon.svg" },
+      { property: "og:image:alt", content: "SpectralFlow — réseau social vidéo cyberpunk" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "SpectralFlow — Réseau social cyberpunk" },
       {
@@ -99,6 +101,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "SpectralFlow est un réseau social hybride qui mêle flux vidéo immersif, partage YouTube et chat temps réel.",
       },
+      { name: "twitter:image", content: "https://spectralflow.lovable.app/icon.svg" },
+      { name: "twitter:site", content: "@spectralflow" },
       { name: "theme-color", content: "#060b1f" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },

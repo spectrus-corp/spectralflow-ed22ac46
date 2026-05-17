@@ -8,7 +8,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/subscriptions")({
+export const Route = createFileRoute("/_app/subscriptions")({
   component: SubscriptionsPage,
   head: () => ({
     meta: [

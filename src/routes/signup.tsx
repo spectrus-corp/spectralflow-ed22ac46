@@ -18,6 +18,11 @@ export const Route = createFileRoute("/signup")({
     meta: [
       { title: "Créer un compte — SpectralFlow" },
       {
+        name: "keywords",
+        content:
+          "inscription SpectralFlow, rejoindre SpectralFlow, compte réseau social, abonnement cyberpunk, chat vidéo",
+      },
+      {
         name: "description",
         content:
           "Rejoins SpectralFlow et plonge dans un flux vidéo cyberpunk immersif avec chat temps réel et partage YouTube.",
@@ -28,6 +33,9 @@ export const Route = createFileRoute("/signup")({
         content: "Inscription gratuite à SpectralFlow.",
       },
       { property: "og:url", content: "https://spectralflow.lovable.app/signup" },
+      { property: "og:image", content: "https://spectralflow.lovable.app/icon.svg" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: "https://spectralflow.lovable.app/icon.svg" },
     ],
     links: [{ rel: "canonical", href: "https://spectralflow.lovable.app/signup" }],
   }),
@@ -110,7 +118,12 @@ function SignupPage() {
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="password">Mot de passe</Label>
-            <Input id="password" type="password" autoComplete="new-password" {...register("password")} />
+            <Input
+              id="password"
+              type="password"
+              autoComplete="new-password"
+              {...register("password")}
+            />
             {errors.password && (
               <p className="text-xs text-destructive">{errors.password.message}</p>
             )}
