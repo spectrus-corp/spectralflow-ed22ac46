@@ -70,6 +70,13 @@ function FeedPage() {
     return () => clearInterval(id);
   }, []);
 
+  // Open composer from mobile tab bar's central create button.
+  useEffect(() => {
+    const open = () => setComposerOpen(true);
+    window.addEventListener("spectral:create", open);
+    return () => window.removeEventListener("spectral:create", open);
+  }, []);
+
   // Realtime: prepend new posts, update like counts, remove deleted ones — all live
   useEffect(() => {
     const channel = supabase
@@ -220,10 +227,10 @@ function FeedPage() {
         ))}
       </div>
 
-      {/* Floating create button */}
+      {/* Floating create button — desktop only; on mobile it lives in the tab bar */}
       <button
         onClick={() => setComposerOpen(true)}
-        className="fixed bottom-20 right-4 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/40 transition-transform hover:scale-110 active:scale-95 md:bottom-6 md:right-6"
+        className="fixed bottom-6 right-6 z-30 hidden h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/40 transition-transform hover:scale-110 active:scale-95 md:flex"
         aria-label="Créer un post"
       >
         <Plus className="h-7 w-7" />
