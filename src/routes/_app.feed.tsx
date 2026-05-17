@@ -169,6 +169,13 @@ function FeedPage() {
     return () => observer.disconnect();
   }, [posts]);
 
+  useEffect(() => {
+    const activePost = posts[activeIdx];
+    if (activePost?.media_type === "youtube") {
+      setMuted(false);
+    }
+  }, [activeIdx, posts]);
+
   if (loading) {
     return (
       <div className="flex h-[calc(100svh-4rem)] md:h-[calc(100svh-3rem)] items-center justify-center bg-black">

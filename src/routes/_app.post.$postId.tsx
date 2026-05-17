@@ -71,6 +71,12 @@ function PostPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId, user]);
 
+  useEffect(() => {
+    if (post?.media_type === "youtube") {
+      setMuted(false);
+    }
+  }, [post]);
+
   if (loading) {
     return (
       <div className="flex h-[calc(100svh-3rem)] items-center justify-center bg-black">

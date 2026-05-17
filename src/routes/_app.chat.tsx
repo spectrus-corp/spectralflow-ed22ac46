@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Loader2, Plus, Send } from "lucide-react";
+import { Loader2, Plus, Send, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -56,6 +56,7 @@ function ChatPage() {
   const { user } = useAuth();
   const [convs, setConvs] = useState<ConversationView[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [showConversations, setShowConversations] = useState(true);
   const [messages, setMessages] = useState<MessageView[]>([]);
   const [input, setInput] = useState("");
   const [loadingConvs, setLoadingConvs] = useState(true);
@@ -149,11 +150,22 @@ function ChatPage() {
     <div className="flex h-[calc(100vh-3rem)]">
       <h1 className="sr-only">Messagerie SpectralFlow</h1>
       {/* Conversation list */}
-      <aside className="flex w-72 flex-col border-r border-border bg-card/40 backdrop-blur-xl">
-        <div className="flex items-center justify-between border-b border-border p-3">
-          <h2 className="text-sm font-semibold">Conversations</h2>
-          <NewChatDialog onCreated={(id) => { setActiveId(id); loadConvs(); }} />
-        </div>
+      {showConversations ? (
+        <aside className="flex w-72 flex-col border-r border-border bg-card/40 backdrop-blur-xl">
+          <div className="flex items-center justify-between border-b border-border p-3 gap-2">
+            <h2 className="text-sm font-semibold">Conversations</h2>
+            <div className="flex items-center gap-2">
+              <NewChatDialog onCreated={(id) => { setActiveId(id); loadConvs(); }} />
+              <button
+                type="button"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition hover:bg-muted/10"
+                onClick={() => setShowConversations(false)}
+                aria-label="Masquer la liste des conversations"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
         <div className="flex-1 overflow-y-auto">
           {loadingConvs ? (
             <div className="flex justify-center p-6">
@@ -187,6 +199,18 @@ function ChatPage() {
           )}
         </div>
       </aside>
+      ) : (
+        <div className="flex items-start">
+          <button
+            type="button"
+            className="m-3 inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card/90 text-muted-foreground shadow transition hover:bg-card"
+            onClick={() => setShowConversations(true)}
+            aria-label="Afficher la liste des conversations"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+        </div>
+      )}
 
       {/* Conversation view */}
       <section className="flex flex-1 flex-col">
