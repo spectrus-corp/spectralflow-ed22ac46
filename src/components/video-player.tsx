@@ -146,8 +146,7 @@ function NativeVideoPlayer({
         loop
         autoPlay
         playsInline
-        // @ts-expect-error iOS-specific attribute
-        webkit-playsinline="true"
+        {...({ "webkit-playsinline": "true", "x5-playsinline": "true" } as Record<string, string>)}
         muted
         preload={nearby ? "auto" : "metadata"}
         className="h-full w-full object-contain"
