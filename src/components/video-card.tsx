@@ -193,11 +193,6 @@ export function VideoCard({ post, active, nearby, onChange }: Props) {
           label="Partager"
           onClick={share}
         />
-        <ActionButton
-          icon={muted ? <VolumeX className="h-7 w-7" /> : <Volume2 className="h-7 w-7" />}
-          label={muted ? "Muet" : "Son"}
-          onClick={onToggleMute}
-        />
         <div className="flex flex-col items-center gap-1 text-xs">
           <Eye className="h-5 w-5 opacity-70" />
           {formatCount(post.views)}
