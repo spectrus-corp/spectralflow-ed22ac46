@@ -38,6 +38,7 @@ function FeedPage() {
   const [loading, setLoading] = useState(true);
   const [composerOpen, setComposerOpen] = useState(false);
   const [activeIdx, setActiveIdx] = useState(0);
+  const [muted, setMuted] = useState(true);
   
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Array<HTMLDivElement | null>>([]);
