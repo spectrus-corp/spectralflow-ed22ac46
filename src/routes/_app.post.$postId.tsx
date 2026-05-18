@@ -71,11 +71,7 @@ function PostPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postId, user]);
 
-  useEffect(() => {
-    if (post?.media_type === "youtube") {
-      setMuted(false);
-    }
-  }, [post]);
+  // Sound is managed globally via installSoundGesture; nothing to do here.
 
   if (loading) {
     return (

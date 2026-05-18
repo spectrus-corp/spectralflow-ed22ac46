@@ -4,9 +4,8 @@ import { Loader2, Plus, Sparkles } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
-import { CreateVideoComposer } from "@/components/create-post";
 import { VideoCard } from "@/components/video-card";
-import { fetchFeedPosts, fetchPostById, isWithinFeedWindow, type FeedPost } from "@/lib/posts";
+import { fetchFeedPosts, fetchPostById, type FeedPost } from "@/lib/posts";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_app/feed")({
@@ -36,9 +35,7 @@ function FeedPage() {
   const { user } = useAuth();
   const [posts, setPosts] = useState<FeedPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [composerOpen, setComposerOpen] = useState(false);
   const [activeIdx, setActiveIdx] = useState(0);
-  const [muted, setMuted] = useState(true);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Array<HTMLDivElement | null>>([]);
@@ -60,23 +57,14 @@ function FeedPage() {
     load();
   }, [load]);
 
-  // Auto-purge posts older than 48h every minute (no reload needed)
+  // Refresh feed when a post is published from the global composer.
   useEffect(() => {
-    const id = setInterval(() => {
-      setPosts((prev) => {
-        const next = prev.filter((p) => isWithinFeedWindow(p.created_at));
-        return next.length === prev.length ? prev : next;
-      });
-    }, 60_000);
-    return () => clearInterval(id);
-  }, []);
+    const onPosted = () => load();
+    window.addEventListener("spectral:posted", onPosted);
+    return () => window.removeEventListener("spectral:posted", onPosted);
+  }, [load]);
 
-  // Open composer from mobile tab bar's central create button.
-  useEffect(() => {
-    const open = () => setComposerOpen(true);
-    window.addEventListener("spectral:create", open);
-    return () => window.removeEventListener("spectral:create", open);
-  }, []);
+  const openComposer = () => window.dispatchEvent(new CustomEvent("spectral:create"));
 
   // Realtime: prepend new posts, update like counts, remove deleted ones — all live
   useEffect(() => {
@@ -87,10 +75,9 @@ function FeedPage() {
         { event: "INSERT", schema: "public", table: "posts" },
         async (payload) => {
           const newId = (payload.new as { id: string }).id;
-          setPosts((prev) => (prev.some((p) => p.id === newId) ? prev : prev));
           try {
             const post = await fetchPostById(newId, userIdRef.current);
-            if (!post || !isWithinFeedWindow(post.created_at)) return;
+            if (!post) return;
             setPosts((prev) => (prev.some((p) => p.id === post.id) ? prev : [post, ...prev]));
           } catch (e) {
             console.error(e);
@@ -154,13 +141,6 @@ function FeedPage() {
     return () => observer.disconnect();
   }, [posts]);
 
-  useEffect(() => {
-    const activePost = posts[activeIdx];
-    if (activePost?.media_type === "youtube") {
-      setMuted(false);
-    }
-  }, [activeIdx, posts]);
-
   if (loading) {
     return (
       <div className="flex h-[calc(100svh-4rem)] md:h-[calc(100svh-3rem)] items-center justify-center bg-black">
@@ -179,14 +159,9 @@ function FeedPage() {
         <p className="max-w-sm text-sm text-muted-foreground">
           Sois le premier à publier une vidéo dans SpectralFlow.
         </p>
-        <Button onClick={() => setComposerOpen(true)} className="neon-glow">
+        <Button onClick={openComposer} className="neon-glow">
           <Plus className="mr-2 h-4 w-4" /> Créer un post
         </Button>
-        <CreateVideoComposer
-          open={composerOpen}
-          onClose={() => setComposerOpen(false)}
-          onPosted={load}
-        />
       </div>
     );
   }
@@ -236,21 +211,6 @@ function FeedPage() {
           </div>
         ))}
       </div>
-
-      {/* Floating create button — desktop only; on mobile it lives in the tab bar */}
-      <button
-        onClick={() => setComposerOpen(true)}
-        className="fixed bottom-6 right-6 z-30 hidden h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/40 transition-transform hover:scale-110 active:scale-95 md:flex"
-        aria-label="Créer un post"
-      >
-        <Plus className="h-7 w-7" />
-      </button>
-
-      <CreateVideoComposer
-        open={composerOpen}
-        onClose={() => setComposerOpen(false)}
-        onPosted={load}
-      />
     </div>
   );
 }
