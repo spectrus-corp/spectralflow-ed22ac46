@@ -4,9 +4,8 @@ import { Loader2, Plus, Sparkles } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/use-auth";
-import { CreateVideoComposer } from "@/components/create-post";
 import { VideoCard } from "@/components/video-card";
-import { fetchFeedPosts, fetchPostById, isWithinFeedWindow, type FeedPost } from "@/lib/posts";
+import { fetchFeedPosts, fetchPostById, type FeedPost } from "@/lib/posts";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_app/feed")({
@@ -36,9 +35,7 @@ function FeedPage() {
   const { user } = useAuth();
   const [posts, setPosts] = useState<FeedPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [composerOpen, setComposerOpen] = useState(false);
   const [activeIdx, setActiveIdx] = useState(0);
-  const [muted, setMuted] = useState(true);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<Array<HTMLDivElement | null>>([]);
@@ -60,23 +57,14 @@ function FeedPage() {
     load();
   }, [load]);
 
-  // Auto-purge posts older than 48h every minute (no reload needed)
+  // Refresh feed when a post is published from the global composer.
   useEffect(() => {
-    const id = setInterval(() => {
-      setPosts((prev) => {
-        const next = prev.filter((p) => isWithinFeedWindow(p.created_at));
-        return next.length === prev.length ? prev : next;
-      });
-    }, 60_000);
-    return () => clearInterval(id);
-  }, []);
+    const onPosted = () => load();
+    window.addEventListener("spectral:posted", onPosted);
+    return () => window.removeEventListener("spectral:posted", onPosted);
+  }, [load]);
 
-  // Open composer from mobile tab bar's central create button.
-  useEffect(() => {
-    const open = () => setComposerOpen(true);
-    window.addEventListener("spectral:create", open);
-    return () => window.removeEventListener("spectral:create", open);
-  }, []);
+  const openComposer = () => window.dispatchEvent(new CustomEvent("spectral:create"));
 
   // Realtime: prepend new posts, update like counts, remove deleted ones — all live
   useEffect(() => {
@@ -87,10 +75,9 @@ function FeedPage() {
         { event: "INSERT", schema: "public", table: "posts" },
         async (payload) => {
           const newId = (payload.new as { id: string }).id;
-          setPosts((prev) => (prev.some((p) => p.id === newId) ? prev : prev));
           try {
             const post = await fetchPostById(newId, userIdRef.current);
-            if (!post || !isWithinFeedWindow(post.created_at)) return;
+            if (!post) return;
             setPosts((prev) => (prev.some((p) => p.id === post.id) ? prev : [post, ...prev]));
           } catch (e) {
             console.error(e);
