@@ -1,4 +1,4 @@
-import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { Bell, Home, MessageCircle, User, Settings, Plus } from "lucide-react";
 
 const left = [
@@ -19,16 +19,10 @@ const right = [
  */
 export function MobileTabBar() {
   const currentPath = useRouterState({ select: (r) => r.location.pathname });
-  const navigate = useNavigate();
 
   const handleCreate = () => {
-    if (!currentPath.startsWith("/feed")) {
-      navigate({ to: "/feed" });
-    }
-    // Defer so feed mounts its listener first.
-    window.setTimeout(() => {
-      window.dispatchEvent(new CustomEvent("spectral:create"));
-    }, 60);
+    // Composer now lives in the app layout — always available, no navigation needed.
+    window.dispatchEvent(new CustomEvent("spectral:create"));
   };
 
   return (

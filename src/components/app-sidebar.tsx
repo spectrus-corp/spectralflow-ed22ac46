@@ -12,6 +12,7 @@ import {
   LogOut,
   Users,
   Wrench,
+  Plus,
 } from "lucide-react";
 import {
   Sidebar,
@@ -67,6 +68,16 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  onClick={() => window.dispatchEvent(new CustomEvent("spectral:create"))}
+                  tooltip="Publier"
+                  className="bg-primary/15 text-primary hover:bg-primary/25"
+                >
+                  <Plus className="h-5 w-5" />
+                  {!collapsed && <span className="font-semibold">Publier</span>}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
               {primaryItems.map((item) => {
                 const active = currentPath.startsWith(item.url);
                 return (
