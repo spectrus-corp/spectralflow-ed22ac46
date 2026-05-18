@@ -373,16 +373,11 @@ function CommentsDrawer({
   const load = useCallback(async () => {
     setLoading(true);
     const { data } = await supabase
-      .from<{
-        id: string;
-        content: string;
-        created_at: string;
-        profile: { username: string; avatar_url: string | null } | null;
-      }>("comments")
+      .from("comments")
       .select("id,content,created_at,profile:profiles(username,avatar_url)")
       .eq("post_id", postId)
       .order("created_at", { ascending: true });
-    setComments(data ?? []);
+    setComments((data ?? []) as unknown as typeof comments);
     setLoading(false);
   }, [postId]);
 
