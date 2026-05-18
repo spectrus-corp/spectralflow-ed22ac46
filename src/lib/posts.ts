@@ -36,11 +36,12 @@ export interface PublishPostPayload {
 
 const EMPTY_UUID = "00000000-0000-0000-0000-000000000000";
 
-/** Posts disappear from the feed after this window (48 hours). */
-export const FEED_WINDOW_MS = 48 * 60 * 60 * 1000;
-
-export function isWithinFeedWindow(createdAt: string): boolean {
-  return Date.now() - new Date(createdAt).getTime() < FEED_WINDOW_MS;
+/**
+ * Posts used to expire after 48h, but users found this confusing
+ * ("posts despawn when I change menus"). They now persist indefinitely.
+ */
+export function isWithinFeedWindow(_createdAt: string): boolean {
+  return true;
 }
 
 export async function publishPost(userId: string, payload: PublishPostPayload): Promise<FeedPost> {
