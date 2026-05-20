@@ -12,8 +12,15 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LegalRouteImport } from './routes/legal'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LegalIndexRouteImport } from './routes/legal.index'
+import { Route as LegalTermsRouteImport } from './routes/legal.terms'
+import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
+import { Route as LegalParentalConsentRouteImport } from './routes/legal.parental-consent'
+import { Route as LegalMinorsRouteImport } from './routes/legal.minors'
+import { Route as LegalCookiesRouteImport } from './routes/legal.cookies'
 import { Route as AppSubscriptionsRouteImport } from './routes/_app.subscriptions'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppProfileRouteImport } from './routes/_app.profile'
@@ -41,6 +48,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LegalRoute = LegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
@@ -49,6 +61,36 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const LegalIndexRoute = LegalIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LegalRoute,
+} as any)
+const LegalTermsRoute = LegalTermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => LegalRoute,
+} as any)
+const LegalPrivacyRoute = LegalPrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => LegalRoute,
+} as any)
+const LegalParentalConsentRoute = LegalParentalConsentRouteImport.update({
+  id: '/parental-consent',
+  path: '/parental-consent',
+  getParentRoute: () => LegalRoute,
+} as any)
+const LegalMinorsRoute = LegalMinorsRouteImport.update({
+  id: '/minors',
+  path: '/minors',
+  getParentRoute: () => LegalRoute,
+} as any)
+const LegalCookiesRoute = LegalCookiesRouteImport.update({
+  id: '/cookies',
+  path: '/cookies',
+  getParentRoute: () => LegalRoute,
 } as any)
 const AppSubscriptionsRoute = AppSubscriptionsRouteImport.update({
   id: '/subscriptions',
@@ -108,6 +150,7 @@ const AppPostPostIdRoute = AppPostPostIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/legal': typeof LegalRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -121,6 +164,12 @@ export interface FileRoutesByFullPath {
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRoute
   '/subscriptions': typeof AppSubscriptionsRoute
+  '/legal/cookies': typeof LegalCookiesRoute
+  '/legal/minors': typeof LegalMinorsRoute
+  '/legal/parental-consent': typeof LegalParentalConsentRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/terms': typeof LegalTermsRoute
+  '/legal/': typeof LegalIndexRoute
   '/post/$postId': typeof AppPostPostIdRoute
 }
 export interface FileRoutesByTo {
@@ -138,12 +187,19 @@ export interface FileRoutesByTo {
   '/profile': typeof AppProfileRoute
   '/settings': typeof AppSettingsRoute
   '/subscriptions': typeof AppSubscriptionsRoute
+  '/legal/cookies': typeof LegalCookiesRoute
+  '/legal/minors': typeof LegalMinorsRoute
+  '/legal/parental-consent': typeof LegalParentalConsentRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/terms': typeof LegalTermsRoute
+  '/legal': typeof LegalIndexRoute
   '/post/$postId': typeof AppPostPostIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_app': typeof AppRouteWithChildren
+  '/legal': typeof LegalRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -157,12 +213,19 @@ export interface FileRoutesById {
   '/_app/profile': typeof AppProfileRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/subscriptions': typeof AppSubscriptionsRoute
+  '/legal/cookies': typeof LegalCookiesRoute
+  '/legal/minors': typeof LegalMinorsRoute
+  '/legal/parental-consent': typeof LegalParentalConsentRoute
+  '/legal/privacy': typeof LegalPrivacyRoute
+  '/legal/terms': typeof LegalTermsRoute
+  '/legal/': typeof LegalIndexRoute
   '/_app/post/$postId': typeof AppPostPostIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/legal'
     | '/login'
     | '/signup'
     | '/sitemap.xml'
@@ -176,6 +239,12 @@ export interface FileRouteTypes {
     | '/profile'
     | '/settings'
     | '/subscriptions'
+    | '/legal/cookies'
+    | '/legal/minors'
+    | '/legal/parental-consent'
+    | '/legal/privacy'
+    | '/legal/terms'
+    | '/legal/'
     | '/post/$postId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -193,11 +262,18 @@ export interface FileRouteTypes {
     | '/profile'
     | '/settings'
     | '/subscriptions'
+    | '/legal/cookies'
+    | '/legal/minors'
+    | '/legal/parental-consent'
+    | '/legal/privacy'
+    | '/legal/terms'
+    | '/legal'
     | '/post/$postId'
   id:
     | '__root__'
     | '/'
     | '/_app'
+    | '/legal'
     | '/login'
     | '/signup'
     | '/sitemap.xml'
@@ -211,12 +287,19 @@ export interface FileRouteTypes {
     | '/_app/profile'
     | '/_app/settings'
     | '/_app/subscriptions'
+    | '/legal/cookies'
+    | '/legal/minors'
+    | '/legal/parental-consent'
+    | '/legal/privacy'
+    | '/legal/terms'
+    | '/legal/'
     | '/_app/post/$postId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  LegalRoute: typeof LegalRouteWithChildren
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -245,6 +328,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/legal': {
+      id: '/legal'
+      path: '/legal'
+      fullPath: '/legal'
+      preLoaderRoute: typeof LegalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_app': {
       id: '/_app'
       path: ''
@@ -258,6 +348,48 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/legal/': {
+      id: '/legal/'
+      path: '/'
+      fullPath: '/legal/'
+      preLoaderRoute: typeof LegalIndexRouteImport
+      parentRoute: typeof LegalRoute
+    }
+    '/legal/terms': {
+      id: '/legal/terms'
+      path: '/terms'
+      fullPath: '/legal/terms'
+      preLoaderRoute: typeof LegalTermsRouteImport
+      parentRoute: typeof LegalRoute
+    }
+    '/legal/privacy': {
+      id: '/legal/privacy'
+      path: '/privacy'
+      fullPath: '/legal/privacy'
+      preLoaderRoute: typeof LegalPrivacyRouteImport
+      parentRoute: typeof LegalRoute
+    }
+    '/legal/parental-consent': {
+      id: '/legal/parental-consent'
+      path: '/parental-consent'
+      fullPath: '/legal/parental-consent'
+      preLoaderRoute: typeof LegalParentalConsentRouteImport
+      parentRoute: typeof LegalRoute
+    }
+    '/legal/minors': {
+      id: '/legal/minors'
+      path: '/minors'
+      fullPath: '/legal/minors'
+      preLoaderRoute: typeof LegalMinorsRouteImport
+      parentRoute: typeof LegalRoute
+    }
+    '/legal/cookies': {
+      id: '/legal/cookies'
+      path: '/cookies'
+      fullPath: '/legal/cookies'
+      preLoaderRoute: typeof LegalCookiesRouteImport
+      parentRoute: typeof LegalRoute
     }
     '/_app/subscriptions': {
       id: '/_app/subscriptions'
@@ -369,9 +501,30 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface LegalRouteChildren {
+  LegalCookiesRoute: typeof LegalCookiesRoute
+  LegalMinorsRoute: typeof LegalMinorsRoute
+  LegalParentalConsentRoute: typeof LegalParentalConsentRoute
+  LegalPrivacyRoute: typeof LegalPrivacyRoute
+  LegalTermsRoute: typeof LegalTermsRoute
+  LegalIndexRoute: typeof LegalIndexRoute
+}
+
+const LegalRouteChildren: LegalRouteChildren = {
+  LegalCookiesRoute: LegalCookiesRoute,
+  LegalMinorsRoute: LegalMinorsRoute,
+  LegalParentalConsentRoute: LegalParentalConsentRoute,
+  LegalPrivacyRoute: LegalPrivacyRoute,
+  LegalTermsRoute: LegalTermsRoute,
+  LegalIndexRoute: LegalIndexRoute,
+}
+
+const LegalRouteWithChildren = LegalRoute._addFileChildren(LegalRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  LegalRoute: LegalRouteWithChildren,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
@@ -379,3 +532,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

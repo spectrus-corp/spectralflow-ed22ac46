@@ -184,9 +184,40 @@ function Landing() {
                 <p className="mt-3 text-sm leading-6 text-foreground">{feature.description}</p>
               </div>
             ))}
+            </div>
           </div>
         </section>
       </main>
+
+      <footer className="relative z-10 border-t border-border bg-card/30 py-8">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <Zap className="h-4 w-4" />
+              </div>
+              <span className="font-semibold">SpectralFlow</span>
+            </div>
+            <nav className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+              <Link to="/legal/terms" className="hover:text-primary hover:underline">
+                CGU
+              </Link>
+              <Link to="/legal/privacy" className="hover:text-primary hover:underline">
+                Confidentialite
+              </Link>
+              <Link to="/legal/cookies" className="hover:text-primary hover:underline">
+                Cookies
+              </Link>
+              <Link to="/legal/minors" className="hover:text-primary hover:underline">
+                Protection des mineurs
+              </Link>
+            </nav>
+          </div>
+          <p className="mt-4 text-xs text-muted-foreground">
+            2026 SpectralFlow. Tous droits reserves.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }
