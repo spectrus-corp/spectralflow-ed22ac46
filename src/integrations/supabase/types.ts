@@ -7,13 +7,118 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
+      blocked_users: {
+        Row: {
+          blocked_id: string
+          blocker_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          blocked_id: string
+          blocker_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          blocked_id?: string
+          blocker_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      call_sessions: {
+        Row: {
+          call_type: string
+          callee_id: string
+          caller_id: string
+          created_at: string
+          ended_at: string | null
+          id: string
+          started_at: string | null
+          status: string
+        }
+        Insert: {
+          call_type: string
+          callee_id: string
+          caller_id: string
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          started_at?: string | null
+          status?: string
+        }
+        Update: {
+          call_type?: string
+          callee_id?: string
+          caller_id?: string
+          created_at?: string
+          ended_at?: string | null
+          id?: string
+          started_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "call_sessions_callee_id_fkey"
+            columns: ["callee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "call_sessions_caller_id_fkey"
+            columns: ["caller_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      call_signals: {
+        Row: {
+          call_id: string
+          created_at: string
+          from_user: string
+          id: string
+          payload: Json
+          signal_type: string
+          to_user: string
+        }
+        Insert: {
+          call_id: string
+          created_at?: string
+          from_user: string
+          id?: string
+          payload: Json
+          signal_type: string
+          to_user: string
+        }
+        Update: {
+          call_id?: string
+          created_at?: string
+          from_user?: string
+          id?: string
+          payload?: Json
+          signal_type?: string
+          to_user?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "call_signals_call_id_fkey"
+            columns: ["call_id"]
+            isOneToOne: false
+            referencedRelation: "call_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comments: {
         Row: {
           content: string
@@ -52,6 +157,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      content_reports: {
+        Row: {
+          content_id: string
+          content_type: string
+          created_at: string
+          id: string
+          reason: string
+          reporter_id: string
+          reviewed_at: string | null
+          status: string
+        }
+        Insert: {
+          content_id: string
+          content_type: string
+          created_at?: string
+          id?: string
+          reason: string
+          reporter_id: string
+          reviewed_at?: string | null
+          status?: string
+        }
+        Update: {
+          content_id?: string
+          content_type?: string
+          created_at?: string
+          id?: string
+          reason?: string
+          reporter_id?: string
+          reviewed_at?: string | null
+          status?: string
+        }
+        Relationships: []
       }
       conversations: {
         Row: {
@@ -125,6 +263,85 @@ export type Database = {
           },
         ]
       }
+      live_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          live_id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          live_id: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          live_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_messages_live_id_fkey"
+            columns: ["live_id"]
+            isOneToOne: false
+            referencedRelation: "live_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      live_sessions: {
+        Row: {
+          chat_enabled: boolean
+          description: string | null
+          ended_at: string | null
+          id: string
+          peak_viewers: number
+          started_at: string | null
+          status: string
+          streamer_id: string
+          title: string
+          viewer_count: number
+        }
+        Insert: {
+          chat_enabled?: boolean
+          description?: string | null
+          ended_at?: string | null
+          id?: string
+          peak_viewers?: number
+          started_at?: string | null
+          status?: string
+          streamer_id: string
+          title: string
+          viewer_count?: number
+        }
+        Update: {
+          chat_enabled?: boolean
+          description?: string | null
+          ended_at?: string | null
+          id?: string
+          peak_viewers?: number
+          started_at?: string | null
+          status?: string
+          streamer_id?: string
+          title?: string
+          viewer_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_sessions_streamer_id_fkey"
+            columns: ["streamer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           content: string
@@ -158,6 +375,88 @@ export type Database = {
           {
             foreignKeyName: "messages_sender_id_fkey"
             columns: ["sender_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          data: Json | null
+          id: string
+          read: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          data?: Json | null
+          id?: string
+          read?: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          data?: Json | null
+          id?: string
+          read?: boolean
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parental_consents: {
+        Row: {
+          expires_at: string
+          id: string
+          parent_email: string
+          requested_at: string
+          responded_at: string | null
+          status: string
+          token: string
+          user_id: string
+        }
+        Insert: {
+          expires_at?: string
+          id?: string
+          parent_email: string
+          requested_at?: string
+          responded_at?: string | null
+          status?: string
+          token: string
+          user_id: string
+        }
+        Update: {
+          expires_at?: string
+          id?: string
+          parent_email?: string
+          requested_at?: string
+          responded_at?: string | null
+          status?: string
+          token?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parental_consents_user_id_fkey"
+            columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -213,31 +512,46 @@ export type Database = {
       }
       profiles: {
         Row: {
+          age_verified: boolean | null
           avatar_url: string | null
           bio: string | null
           created_at: string
+          date_of_birth: string | null
           display_name: string | null
           id: string
+          is_minor: boolean | null
+          parent_email: string | null
+          parental_consent_status: string | null
           updated_at: string
           username: string
           youtube_channel: string | null
         }
         Insert: {
+          age_verified?: boolean | null
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
+          date_of_birth?: string | null
           display_name?: string | null
           id: string
+          is_minor?: boolean | null
+          parent_email?: string | null
+          parental_consent_status?: string | null
           updated_at?: string
           username: string
           youtube_channel?: string | null
         }
         Update: {
+          age_verified?: boolean | null
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
+          date_of_birth?: string | null
           display_name?: string | null
           id?: string
+          is_minor?: boolean | null
+          parent_email?: string | null
+          parental_consent_status?: string | null
           updated_at?: string
           username?: string
           youtube_channel?: string | null
@@ -282,7 +596,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      increment_post_views: { Args: { p_post_id: string }; Returns: undefined }
+      decrement_live_viewers: {
+        Args: { p_live_id: string }
+        Returns: undefined
+      }
+      increment_live_viewers: {
+        Args: { p_live_id: string }
+        Returns: undefined
+      }
+      increment_post_views: {
+        Args: { p_post_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
@@ -294,7 +619,6 @@ export type Database = {
 }
 
 type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
-
 type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
 export type Tables<
