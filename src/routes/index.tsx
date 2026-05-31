@@ -184,7 +184,6 @@ function Landing() {
                 <p className="mt-3 text-sm leading-6 text-foreground">{feature.description}</p>
               </div>
             ))}
-            </div>
           </div>
         </section>
       </main>
